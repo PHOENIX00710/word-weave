@@ -1,5 +1,6 @@
 import express from 'express';
 import { userModel } from '../models/userModel.js';
+import bcrypt from 'bcrypt'
 
 export const signup = async (req, res) => {
     const { username, email, password } = req.body
@@ -10,11 +11,11 @@ export const signup = async (req, res) => {
             message: "Issue in the entered data"
         })
     }
-
+    const hashedPassword= await bcrypt.hash(password,10);
     const newUser = new userModel({
         username,
         email,
-        password
+        password:hashedPassword,
     })
 
     try {
