@@ -15,8 +15,20 @@ await mongoose.connect(process.env.MongoURI)
 const app=express();
 app.use(express.json()) // To recieve JSON format data from the routes
 
+// Routes
 app.use("/api/v1",testRoute)
 app.use("/api/v1",userRoute)
+
+// Middleware to handle errors
+app.use((err,req,res,next)=>{
+    const statusCode=err.statusCode || 500;
+    const errMessage=err.message || 'Interal Server Error';
+    res.status(statusCode).json({
+        success:false,
+        statusCode,
+        message:errMessage
+    })
+})
 
 app.get("/",(req,res)=>{
     res.json({
