@@ -1,9 +1,8 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { InputAdornment, TextField, Button, createTheme, ThemeProvider, Menu, MenuItem, Fade } from '@mui/material'
+import { InputAdornment, TextField, Button, createTheme, ThemeProvider} from '@mui/material'
 import { SearchRounded, SearchOutlined, } from '@mui/icons-material';
 import MenuIcon from '@mui/icons-material/Menu';
-import { IoIosClose } from "react-icons/io";
 import { IoIosCloseCircle } from "react-icons/io";
 
 function Header() {
@@ -23,22 +22,19 @@ function Header() {
     const [menuBtn, setMenuBtn] = useState(false)
 
     const handleClick = (event) => {
-        setMenuBtn((prevState)=>(
+        setMenuBtn((prevState) => (
             !prevState
         ));
     };
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
 
     return (
-        <header className='border-b-12 text-red-400 flex items-center justify-between p-4 border-b-4'>
+        <header className='border-b-1 flex items-center justify-between p-4 border-b-4'>
 
             {/*LOGO*/}
 
-            <div id='logo' className='text-white bg-logo px-3 py-1 rounded-md'>
-                <span className=''><span className='text-2xl md:text-4xl'>W</span><span className='md:text-3xl'>ord</span></span>
-                <span className=''><span className='text-2xl md:text-4xl'>W</span><span className='md:text-3xl'>eave</span></span>
+            <div id='logo' className={`text-white bg-gradient-to-r from-orange-400 via-red-500 to-red-700 font-semibold px-3 py-1 rounded-md flex justify-center items-center h-auto`}>
+                <span className=''><span className={`text-2xl md:text-4xl`}>W</span><span className={`md:text-2xl`}>ord</span></span>
+                <span className=''><span className={`text-2xl md:text-4xl`}>W</span><span className={`md:text-2xl`}>eave</span></span>
             </div>
 
             {/* Nav list desktop view */}
