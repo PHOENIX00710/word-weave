@@ -1,38 +1,59 @@
 import React, { useState } from 'react'
-import { Alert, Button, TextField } from '@mui/material'
+import { Button, TextField } from '@mui/material'
+import Alert from '@mui/material/Alert';
+import {useNavigate} from 'react-router-dom'
 
 function SignUp() {
 
   const [formData, setFormData] = useState({})
+  const [failure, setFailure] = useState(null)
+  const [loading, setLoading] = useState(false)
+  const navigate=useNavigate() // To navigate to sign in upon succes in signup
 
-  const handleSubmit = async(e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    console.log(formData);
-    try{
-      const req=await fetch('/api/v1/signup',{
-        method:'POST',
-        headers:{
-          'Content-Type':'application/json'
-        },
-        body:JSON.stringify(formData) // HTTP only handles text data
+    if (!formData.username || !formData.password || !formData.email) {
+      setFormData({
+        "email": '',
+        "username": '',
+        "password": '',
       })
-      const data=await req.json()
-      if(data.success == true){
-        Alert()
-      }
+      return setFailure("Fill all required fields")
     }
-    catch(e){
-      console.log(e);
+    try {
+      setFailure(null)
+      setLoading(true)
+      const req = await fetch('/api/v1/signup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData) // HTTP only handles text data
+      })
+      const data = await req.json()
+      if (data.success == false)
+        return setFailure("Error in signup. Try Again later!!")
     }
+    catch (e) {
+      setFailure(e)
+    }
+    setFormData({
+      "email": '',
+      "username": '',
+      "password": '',
+    })
+    setLoading(false)
+    navigate("/About")
   }
 
   const handleChange = (e) => {
     const input = e.target.id
-    const val = e.target.value
-    const temp=({...formData,[input]:val}) // Make sure u are using an object and not an
-                                        // array else it will append instead of overwriting
+    const val = e.target.value.trim() //.trim() to get rid of useless white spaces at start
+    const temp = ({ ...formData, [input]: val }) // Make sure u are using an object and not an
+    // array else it will append instead of overwriting
     setFormData(temp)
   }
+
   return (
     <div className='h-screen flex justify-center '>
       <div id="container" className=' flex flex-col gap-4 items-center tablet:flex-row tablet:gap-14 p-8 basis-1/2 '>
@@ -55,6 +76,7 @@ function SignUp() {
               sx={{
                 width: "300px"
               }}
+              value={formData.username}
               onChange={handleChange}
             />
             <TextField
@@ -64,6 +86,8 @@ function SignUp() {
               autoComplete="current-email"
               variant="standard"
               color='warning'
+              value={formData.email}
+              helperText="We'll never share your email."
               onChange={handleChange}
             />
             <TextField
@@ -73,15 +97,36 @@ function SignUp() {
               autoComplete="current-password"
               variant="standard"
               color='warning'
+              value={formData.password}
               onChange={handleChange}
             />
-            <Button variant="contained"
-              color='warning'
-              onClick={handleSubmit}
-            >
-              SIGN UP
-            </Button>
+            {/* Loader */}
+
+            {/* Sign up Button */}
+            {
+              !loading &&
+              <Button variant="contained"
+                color='warning'
+                onClick={handleSubmit}
+                disabled={loading}
+
+              >
+                SIGN UP
+              </Button>
+            }
+
           </form>
+          {
+            failure &&
+            <Alert
+              severity="error"
+              sx={{
+                marginTop: "1.12rem"
+              }}
+            >
+              {failure}
+            </Alert>
+          }
         </section>
       </div>
     </div>
