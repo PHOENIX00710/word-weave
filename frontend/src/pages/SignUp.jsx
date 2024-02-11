@@ -1,14 +1,14 @@
 import React, { useState } from 'react'
 import { Button, TextField } from '@mui/material'
 import Alert from '@mui/material/Alert';
-import {useNavigate} from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 function SignUp() {
 
   const [formData, setFormData] = useState({})
   const [failure, setFailure] = useState(null)
   const [loading, setLoading] = useState(false)
-  const navigate=useNavigate() // To navigate to sign in upon succes in signup
+  const navigate = useNavigate() // To navigate to sign in upon succes in signup
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -43,7 +43,7 @@ function SignUp() {
       "password": '',
     })
     setLoading(false)
-    navigate("/About")
+    navigate("/signin")
   }
 
   const handleChange = (e) => {
@@ -114,8 +114,12 @@ function SignUp() {
                 SIGN UP
               </Button>
             }
-
+            <p className='flex justify-between'>
+              <section>Already signed up? </section>
+              <Link to={"/signin"} className=' text-teal-500'>Sign In</Link>
+            </p>
           </form>
+          {/* Alert Section */}
           {
             failure &&
             <Alert

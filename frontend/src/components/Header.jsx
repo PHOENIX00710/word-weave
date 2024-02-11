@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { InputAdornment, TextField, Button, createTheme, ThemeProvider} from '@mui/material'
+import { InputAdornment, TextField, Button, createTheme, ThemeProvider } from '@mui/material'
 import { SearchRounded, SearchOutlined, } from '@mui/icons-material';
 import MenuIcon from '@mui/icons-material/Menu';
 import { IoIosCloseCircle } from "react-icons/io";
@@ -32,16 +32,18 @@ function Header() {
 
             {/*LOGO*/}
 
-            <div id='logo' className={`text-white bg-gradient-to-r from-orange-400 via-red-500 to-red-700 font-semibold px-3 py-1 rounded-md flex justify-center items-center h-auto`}>
-                <span className=''><span className={`text-2xl md:text-4xl`}>W</span><span className={`md:text-2xl`}>ord</span></span>
-                <span className=''><span className={`text-2xl md:text-4xl`}>W</span><span className={`md:text-2xl`}>eave</span></span>
-            </div>
+            <Link to={"/home"}>
+                <div id='logo' className={`text-white bg-gradient-to-r from-orange-400 via-red-500 to-red-700 font-semibold px-3 py-1 rounded-md flex justify-center items-center h-auto`}>
+                    <span className=''><span className={`text-2xl md:text-4xl`}>W</span><span className={`md:text-2xl`}>ord</span></span>
+                    <span className=''><span className={`text-2xl md:text-4xl`}>W</span><span className={`md:text-2xl`}>eave</span></span>
+                </div>
+            </Link>
 
             {/* Nav list desktop view */}
 
             <nav className=''>
                 <ul className="list-none justify-between gap-20 font-bold  hidden tablet:flex">
-                    <li className='text-xl hover:text-navLight text-navDark' ><Link to='/'>Home</Link></li>
+                    <li className='text-xl hover:text-navLight text-navDark' ><Link to='/home'>Home</Link></li>
                     <li className='text-xl hover:text-navLight text-navDark'><Link to='/about'>About</Link></li>
                     <li className='text-xl hover:text-navLight text-navDark'><Link to='/projects' >Projects</Link></li>
                 </ul>
@@ -98,18 +100,20 @@ function Header() {
 
                 {/*Sign In Button*/}
 
-                <Button
-                    variant="contained"
-                    color='success'
-                    className='text-black'
-                    sx={{
-                        fontSize: {
-                            xs: "small"
-                        }
-                    }}
-                >
-                    Sign In
-                </Button>
+                <Link to={"/signin"}>
+                    <Button
+                        variant="contained"
+                        color='success'
+                        className='text-black'
+                        sx={{
+                            fontSize: {
+                                xs: "small"
+                            }
+                        }}
+                    >
+                        Sign In
+                    </Button>
+                </Link>
 
                 {/* Menu button mobile view */}
 
@@ -138,7 +142,6 @@ function Header() {
                         onClick={handleClick}
                     />
                 }
-
                 {
                     menuBtn &&
                     <nav id='nav-mobile' className='absolute right-0 top-12 p-4 bg-white text-black flex flex-col gap-3 tablet:hidden list-none shadow-lg rounded font-mono'>
@@ -146,7 +149,7 @@ function Header() {
                             className='text-xl hover:bg-slate-300 text-black rounded px-3'
                             onClick={handleClick}
                         >
-                            <Link to='/'>Home</Link>
+                            <Link to='/home'>Home</Link>
                         </li>
                         <li
                             className='text-xl hover:bg-slate-300 text-black rounded px-3'
