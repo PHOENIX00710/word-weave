@@ -5,7 +5,6 @@ import jwt from 'jsonwebtoken'
 
 export const signup = async (req, res, next) => {
     const { username, email, password } = req.body
-    console.log(username, email, password);
 
     if (!password || !username || !email || email === '' || password === '' || username === '') {
         // Make sure that we return from here else bcrypt will throw an error for a lack of data/salt to encrypt confusing the final error.
@@ -35,7 +34,6 @@ export const signup = async (req, res, next) => {
 
 export const signinHelper = async (req, res, next) => {
     const { email, password } = req.body
-    console.log(email,password);
     if (!email || !password || email === "" || password === "") {
         return (
             next(errorHandler(422, "Email and Password are required"))

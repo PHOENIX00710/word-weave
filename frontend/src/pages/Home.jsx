@@ -1,8 +1,10 @@
 import React from 'react'
+import { useDispatch, useSelector } from "react-redux"
 
 function Home() {
+  const userDetails = useSelector((state) => state.userDetails);
   return (
-    <div>Home</div>
+    <div>Hi,{userDetails.username}</div>
   )
 }
 

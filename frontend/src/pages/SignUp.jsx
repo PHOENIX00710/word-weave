@@ -115,7 +115,7 @@ function SignUp() {
               </Button>
             }
             <p className='flex justify-between'>
-              <section>Already signed up? </section>
+              <i>Already signed up? </i>
               <Link to={"/signin"} className=' text-teal-500'>Sign In</Link>
             </p>
           </form>

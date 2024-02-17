@@ -2,13 +2,18 @@ import React, { useState } from 'react'
 import { Button, TextField } from '@mui/material'
 import Alert from '@mui/material/Alert';
 import { Link, useNavigate } from 'react-router-dom'
+import { useDispatch, useSelector } from "react-redux"
+import { signInFailure, signInStart, signInSuccess } from '../features/user/userSlice';
 
 function SignIn() {
 
-  const [formData, setFormData] = useState({})
-  const [failure, setFailure] = useState(null)
-  const [loading, setLoading] = useState(false)
-  const navigate = useNavigate() // To navigate to sign in upon succes in signup
+  const userState = useSelector(state => state);
+  const [formData, setFormData] = useState({
+    email: '',
+    password: ''
+  })
+  const dispatch = useDispatch()
+  const navigate = useNavigate() // To navigate to homme upon succes in signin
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -17,38 +22,45 @@ function SignIn() {
         "email": '',
         "password": '',
       })
-      return setFailure("Fill all required fields")
+      return dispatch(signInFailure("Please Enter both Username and Password"))
     }
     try {
-      setFailure(null)
-      setLoading(true)
-      const req = await fetch('/api/v1/sigin', {
+      dispatch(signInStart())
+      console.log(formData);
+      const req = await fetch('http://localhost:3000/api/v1/signin', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify(formData) // HTTP only handles text data
       })
+      console.log("here as well");
+      console.log(req);
       const data = await req.json()
+      console.log("here as well 2");
       if (data.success == false)
-        return setFailure("Error in signup. Try Again later!!")
+        return dispatch(signInFailure("Error in signup. Try Again later!!"))
+      dispatch(signInSuccess({
+        email: data.sendInfo.email,
+        id: data.sendInfo._id,
+        username: data.sendInfo.username,
+      }))
+      console.log("After: ", userState);
     }
     catch (e) {
-      setFailure(e)
+      return dispatch(signInFailure(e.message))
     }
     setFormData({
       "email": '',
       "password": '',
     })
-    setLoading(false)
     navigate("/home")
   }
 
   const handleChange = (e) => {
     const input = e.target.id
-    const val = e.target.value.trim() //.trim() to get rid of useless white spaces at start
-    const temp = ({ ...formData, [input]: val }) // Make sure u are using an object and not an
-    // array else it will append instead of overwriting
+    const val = e.target.value.trim()
+    const temp = ({ ...formData, [input]: val })
     setFormData(temp)
   }
 
@@ -76,7 +88,7 @@ function SignIn() {
               helperText="We'll never share your email."
               onChange={handleChange}
               sx={{
-                width:"300px",
+                width: "300px",
               }}
             />
             <TextField
@@ -93,31 +105,30 @@ function SignIn() {
 
             {/* Sign up Button */}
             {
-              !loading &&
+              !userState.loading &&
               <Button variant="contained"
                 color='warning'
                 onClick={handleSubmit}
-                disabled={loading}
-
+                disabled={userState.loading}
               >
                 SIGN IN
               </Button>
             }
             <p className='flex justify-between'>
-              <section>New User? </section>
+              <em>New User? </em>
               <Link to={"/signup"} className=' text-teal-500'>Register</Link>
             </p>
           </form>
           {/* Alert Section */}
           {
-            failure &&
+            userState.error &&
             <Alert
               severity="error"
               sx={{
                 marginTop: "1.12rem"
               }}
             >
-              {failure}
+              {userState.error}
             </Alert>
           }
         </section>
