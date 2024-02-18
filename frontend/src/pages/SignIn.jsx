@@ -26,7 +26,6 @@ function SignIn() {
     }
     try {
       dispatch(signInStart())
-      console.log(formData);
       const req = await fetch('http://localhost:3000/api/v1/signin', {
         method: 'POST',
         headers: {
@@ -34,10 +33,7 @@ function SignIn() {
         },
         body: JSON.stringify(formData) // HTTP only handles text data
       })
-      console.log("here as well");
-      console.log(req);
       const data = await req.json()
-      console.log("here as well 2");
       if (data.success == false)
         return dispatch(signInFailure("Error in signup. Try Again later!!"))
       dispatch(signInSuccess({
@@ -45,7 +41,6 @@ function SignIn() {
         id: data.sendInfo._id,
         username: data.sendInfo.username,
       }))
-      console.log("After: ", userState);
     }
     catch (e) {
       return dispatch(signInFailure(e.message))
