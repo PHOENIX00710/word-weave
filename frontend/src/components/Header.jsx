@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { InputAdornment, TextField, Button, createTheme, ThemeProvider } from '@mui/material'
+import { InputAdornment, TextField, Button, createTheme, ThemeProvider, Avatar } from '@mui/material'
 import { SearchRounded, SearchOutlined, } from '@mui/icons-material';
 import MenuIcon from '@mui/icons-material/Menu';
 import { IoIosCloseCircle } from "react-icons/io";
+import { useSelector } from "react-redux"
 
 function Header() {
     const theme = createTheme({
@@ -20,6 +21,7 @@ function Header() {
     });
 
     const [menuBtn, setMenuBtn] = useState(false)
+    const userDetails = useSelector(state => state.user.userDetails)
 
     const handleClick = (event) => {
         setMenuBtn((prevState) => (
@@ -98,22 +100,55 @@ function Header() {
                 </ThemeProvider>
 
 
-                {/*Sign In Button*/}
+                {/*Sign In Button or User Details*/}
 
-                <Link to={"/signin"}>
-                    <Button
-                        variant="contained"
-                        color='success'
-                        className='text-black'
-                        sx={{
-                            fontSize: {
-                                xs: "small"
-                            }
-                        }}
-                    >
-                        Sign In
-                    </Button>
-                </Link>
+                {
+                    userDetails ?
+                        (
+                            <>
+                                <Avatar />
+                                <nav id='nav-mobile' className='absolute right-0 top-12 p-4 bg-white text-black flex flex-col gap-3 list-none shadow-lg rounded font-mono'>
+                                    <li
+                                        className='text-xl hover:bg-slate-300 text-black rounded px-3'
+                                        onClick={handleClick}
+                                    >
+                                        <Link to='/profile'>Profile</Link>
+                                    </li>
+                                    <li
+                                        className='text-xl hover:bg-slate-300 text-black rounded px-3'
+                                        onClick={handleClick}
+                                    >
+                                        <Link to='/about'>About</Link>
+                                    </li>
+                                    <li
+                                        className='text-xl hover:bg-slate-300 text-black rounded px-3'
+                                        onClick={handleClick}
+                                    >
+                                        <Link to='/projects'>Projects</Link>
+                                    </li>
+                                </nav>
+                            </>
+
+                        ) :
+                        (
+                            <Link to={"/signin"}>
+                                <Button
+                                    variant="contained"
+                                    color='success'
+                                    className='text-black'
+                                    sx={{
+                                        fontSize: {
+                                            xs: "small"
+                                        }
+                                    }}
+                                >
+                                    Sign In
+                                </Button>
+                            </Link>
+                        )
+                }
+
+
 
                 {/* Menu button mobile view */}
 
