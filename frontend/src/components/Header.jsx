@@ -21,12 +21,19 @@ function Header() {
     });
 
     const [menuBtn, setMenuBtn] = useState(false)
+    const [userSignIn, setUserSignIn] = useState(false)
     const userDetails = useSelector(state => state.user.userDetails)
 
     const handleClick = (event) => {
         setMenuBtn((prevState) => (
             !prevState
         ));
+    };
+
+    const handleUserClick = (event) => {
+        setUserSignIn((prevState) => (
+            !prevState
+        ))
     };
 
     return (
@@ -103,33 +110,59 @@ function Header() {
                 {/*Sign In Button or User Details*/}
 
                 {
+                    // If signed in, display user details with option to jump to profile
                     userDetails ?
                         (
                             <>
-                                <Avatar />
-                                <nav id='nav-mobile' className='absolute right-0 top-12 p-4 bg-white text-black flex flex-col gap-3 list-none shadow-lg rounded font-mono'>
-                                    <li
-                                        className='text-xl hover:bg-slate-300 text-black rounded px-3'
-                                        onClick={handleClick}
-                                    >
-                                        <Link to='/profile'>Profile</Link>
-                                    </li>
-                                    <li
-                                        className='text-xl hover:bg-slate-300 text-black rounded px-3'
-                                        onClick={handleClick}
-                                    >
-                                        <Link to='/about'>About</Link>
-                                    </li>
-                                    <li
-                                        className='text-xl hover:bg-slate-300 text-black rounded px-3'
-                                        onClick={handleClick}
-                                    >
-                                        <Link to='/projects'>Projects</Link>
-                                    </li>
-                                </nav>
+                                {/* User Avatar */}
+                                <Avatar
+                                    className='cursor-pointer'
+                                    src={userDetails.profilePicture ? userDetails.profilePicture : "https://cdn.vectorstock.com/i/1000x1000/30/97/flat-business-man-user-profile-avatar-icon-vector-4333097.webp"}
+                                    onClick={handleUserClick}
+                                />
+
+                                {
+                                    userSignIn &&
+                                    <IoIosCloseCircle className='cursor-pointer text-black text-3xl absolute -right-4 top-8 hover:text-slate-400 z-10 '
+                                        onClick={handleUserClick}
+                                    />
+                                }
+                                {/* User Details displayed on click */}
+                                {
+                                    userSignIn &&
+                                    (
+                                        <nav id='nav-mobile' className='absolute right-0 top-12 p-4 bg-white text-black flex flex-col gap-3 list-none shadow-lg rounded font-mono'>
+                                            <li
+                                                className='text-xl text-black rounded px-3'
+                                                onClick={handleUserClick}
+                                            >
+                                                User:
+                                                <strong className='text-orange-600'>
+                                                    {userDetails.username}
+                                                </strong>
+                                            </li>
+                                            <li
+                                                className='text-xl text-black rounded px-3'
+                                                onClick={handleUserClick}
+                                            >
+                                                Email:
+                                                <strong className='text-orange-600'>
+                                                    {userDetails.email}
+                                                </strong>
+                                            </li>
+                                            <li
+                                                className='text-xl hover:bg-slate-300 text-black rounded px-3 cursor-pointer'
+                                                onClick={handleUserClick}
+                                            >
+                                                <Link to='/profile'>Profile</Link>
+                                            </li>
+                                        </nav>
+                                    )
+                                }
                             </>
 
                         ) :
+                        // If not signed in, display sign up and log in buttons
                         (
                             <Link to={"/signin"}>
                                 <Button
@@ -173,7 +206,7 @@ function Header() {
 
                 {
                     menuBtn &&
-                    <IoIosCloseCircle className='text-black text-3xl absolute -right-4 top-8 hover:text-slate-400 z-10'
+                    <IoIosCloseCircle className='cursor-pointer text-black text-3xl absolute -right-4 top-8 hover:text-slate-400 z-10 tablet:hidden'
                         onClick={handleClick}
                     />
                 }
@@ -181,19 +214,19 @@ function Header() {
                     menuBtn &&
                     <nav id='nav-mobile' className='absolute right-0 top-12 p-4 bg-white text-black flex flex-col gap-3 tablet:hidden list-none shadow-lg rounded font-mono'>
                         <li
-                            className='text-xl hover:bg-slate-300 text-black rounded px-3'
+                            className='text-xl cursor-pointer hover:bg-slate-300 text-black rounded px-3'
                             onClick={handleClick}
                         >
                             <Link to='/home'>Home</Link>
                         </li>
                         <li
-                            className='text-xl hover:bg-slate-300 text-black rounded px-3'
+                            className='text-xl cursor-pointer hover:bg-slate-300 text-black rounded px-3'
                             onClick={handleClick}
                         >
                             <Link to='/about'>About</Link>
                         </li>
                         <li
-                            className='text-xl hover:bg-slate-300 text-black rounded px-3'
+                            className='text-xl cursor-pointer hover:bg-slate-300 text-black rounded px-3'
                             onClick={handleClick}
                         >
                             <Link to='/projects'>Projects</Link>
