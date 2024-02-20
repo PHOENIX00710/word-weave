@@ -51,19 +51,81 @@ export const signinHelper = async (req, res, next) => {
             next(errorHandler(401, "Invalid Email or Password"))
         )
     }
-    const token=  jwt.sign(currUser._id.toString(),process.env.JWT_KEY)
-    const sendInfo={...currUser._doc}
+    const token = jwt.sign(currUser._id.toString(), process.env.JWT_KEY)
+    const sendInfo = { ...currUser._doc }
     delete sendInfo.password; // To delete password from the sending info
-    sendInfo.token=token;
+    sendInfo.token = token;
     res
         .status(201)
         .cookie("user_token", token, {
             httpOnly: true,
-            
+
         })
         .json({
-            message:"Signed In Successfully",
+            message: "Signed In Successfully",
             sendInfo,
         })
+
+}
+
+export const googleSignup = async (req, res, next) => {
+    const { email, name, image } = req.body;
+    console.log(email, name, image);
+    if (!image || !name || !email || email === '' || name === '' || image === '') {
+        return (
+            next(errorHandler(401, 'Error in entered data'))
+        )
+    }
+    const username = Math.random(1).toString(36).slice(-8) + '-' + name.toString()
+    const password = Math.random().toString(36).slice(-8)
+    const hashedPassword = await bcrypt.hash(password, 12)
+
+    const userExists = await userModel.findOne({ email });
+    console.log(userExists);
+    if (userExists) {
+        const token = jwt.sign(userExists._id.toString(), process.env.JWT_KEY)
+        const sendInfo = { ...userExists._doc }
+        delete sendInfo.password; // To delete password from the sending info
+        sendInfo.token = token;
+        res
+            .status(201)
+            .cookie("user_token", token, {
+                httpOnly: true,
+
+            })
+            .json({
+                message: "Signed In Successfully",
+                sendInfo,
+            })
+        return
+    }
+
+    try {
+        const newUser = await userModel.create({
+            username,
+            email,
+            password: hashedPassword,
+            photoURL: image,
+        })
+        await newUser.save()
+        const token = jwt.sign(newUser._id.toString(), process.env.JWT_KEY)
+        const sendInfo = { ...newUser._doc }
+        delete sendInfo.password; // To delete password from the sending info
+        sendInfo.token = token;
+        res
+            .status(201)
+            .cookie("user_token", token, {
+                httpOnly: true,
+
+            })
+            .json({
+                message: "Signed In Successfully",
+                sendInfo,
+            })
+    }
+    catch (e) {
+        console.log(e);
+        return next(errorHandler(402, "Error in Sign Up!!"))
+    }
 
 }

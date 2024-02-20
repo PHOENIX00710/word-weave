@@ -14,8 +14,11 @@ export const userSchema = new mongoose.Schema({
     password: {
         type: String,
         required: true,
+    },
+    photoURL: {
+        type: String
     }
 }, { timestamps: true }
 )
 
-export const userModel=mongoose.model("User",userSchema);
+export const userModel = mongoose.model("User", userSchema);
