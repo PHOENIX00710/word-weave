@@ -1,7 +1,8 @@
-import { userModel } from '../models/userModel.js';
+import { userModel, userSchema } from '../models/userModel.js';
 import bcrypt from 'bcrypt'
 import { errorHandler } from '../utils/error.utils.js';
 import jwt from 'jsonwebtoken'
+import mongoose from 'mongoose';
 
 export const signup = async (req, res, next) => {
     const { username, email, password } = req.body
@@ -70,7 +71,6 @@ export const signinHelper = async (req, res, next) => {
 
 export const googleSignup = async (req, res, next) => {
     const { email, name, image } = req.body;
-    console.log(email, name, image);
     if (!image || !name || !email || email === '' || name === '' || image === '') {
         return (
             next(errorHandler(401, 'Error in entered data'))
@@ -81,7 +81,6 @@ export const googleSignup = async (req, res, next) => {
     const hashedPassword = await bcrypt.hash(password, 12)
 
     const userExists = await userModel.findOne({ email });
-    console.log(userExists);
     if (userExists) {
         const token = jwt.sign(userExists._id.toString(), process.env.JWT_KEY)
         const sendInfo = { ...userExists._doc }
@@ -91,7 +90,6 @@ export const googleSignup = async (req, res, next) => {
             .status(201)
             .cookie("user_token", token, {
                 httpOnly: true,
-
             })
             .json({
                 message: "Signed In Successfully",
@@ -124,8 +122,67 @@ export const googleSignup = async (req, res, next) => {
             })
     }
     catch (e) {
-        console.log(e);
         return next(errorHandler(402, "Error in Sign Up!!"))
     }
 
+}
+
+export const updateUserDetails = async (req, res, next) => {
+    const token = req.cookies.user_token
+    let user_id = jwt.verify(token, process.env.JWT_KEY)
+
+    // To Convert user_ID from string to mongo id format
+    let uid = new mongoose.Types.ObjectId(user_id)
+
+    const currUser = await userModel.findById(uid)
+    if (!currUser)
+        return next(errorHandler(403, "Unauthorized User"))
+
+    const { image, username, password } = req.body
+    const hashedPassword = await bcrypt.hash(password, 10)
+    await currUser.updateOne({
+        photoURL: image,
+        username: username,
+        password: hashedPassword
+    })
+    await currUser.save()
+    res.json({
+        success: "true",
+        message: "User Details Updated"
+    })
+}
+
+export const deleteUser = async (req, res, next) => {
+    const token = req.cookies.user_token
+    let user_id = jwt.verify(token, process.env.JWT_KEY)
+    // To Convert user_ID from string to mongo id format
+    let uid = new mongoose.Types.ObjectId(user_id)
+
+    const currUser = await userModel.findById(uid)
+    if (!currUser)
+        return next(errorHandler(403, "Unauthorized User"))
+    try {
+        await currUser.deleteOne()
+        res
+            .status(200)
+            .json(
+                {
+                    success: true,
+                    message: "Account Deleted Successfully!"
+                }
+            )
+    }
+    catch (err) {
+        return next(errorHandler(500, "Server Error"));
+    }
+}
+
+export const signOut = (req, res, next) => {
+    res
+        .status(200)
+        .cookie('user_token', '')
+        .json({
+            success: true,
+            message: "Signed Out Successfully"
+        })
 }

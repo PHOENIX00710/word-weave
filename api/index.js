@@ -4,6 +4,7 @@ import dotenv from 'dotenv'
 import testRoute from './routes/test.js'
 import userRoute from './routes/users.js'
 import cors from 'cors'
+import cookieParser from 'cookie-parser'
 
 dotenv.config(); //To access environment variables 
 
@@ -22,6 +23,7 @@ await mongoose.connect(process.env.MongoURI)
 const app = express();
 app.use(express.json()) // To recieve JSON format data from the routes
 app.use(cors(corsOptions))
+app.use(cookieParser())
 
 // Routes
 app.use("/api/v1", testRoute)

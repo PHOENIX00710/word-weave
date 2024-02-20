@@ -106,7 +106,6 @@ function SignUp() {
           dispatch(signInFailure())
           return setFailure(data.message)
         }
-        console.log(data);
         dispatch(signInSuccess({
           email: data.sendInfo.email,
           id: data.sendInfo._id,
