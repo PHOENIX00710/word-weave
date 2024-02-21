@@ -8,6 +8,7 @@ import SignUp from './pages/SignUp'
 import SignIn from './pages/SignIn'
 import Footer from './components/Footer'
 import Profile from './pages/Profile'
+import Signout from './components/Signout'
 
 function App() {
   return (
@@ -19,7 +20,7 @@ function App() {
           <Route path='/home' Component={Home} />
           <Route path="/signup" Component={SignUp} />
           <Route path='/signin' Component={SignIn} />
-          <Route path="/about" Component={About} />
+          <Route path="/signout" Component={Signout} />
           <Route path="/profile" Component={Profile} />
           <Route path="/dashboard" Component={Dashboard} />
         </Routes>

@@ -53,8 +53,8 @@ function Header() {
             <nav className=''>
                 <ul className="list-none justify-between gap-20 font-bold  hidden tablet:flex">
                     <li className='text-xl hover:text-navLight text-navDark' ><Link to='/home'>Home</Link></li>
-                    <li className='text-xl hover:text-navLight text-navDark'><Link to='/about'>About</Link></li>
-                    <li className='text-xl hover:text-navLight text-navDark'><Link to='/projects' >Projects</Link></li>
+                    <li className='text-xl hover:text-navLight text-navDark'><Link to='/dashboard'>Dashboard</Link></li>
+                    <li className='text-xl hover:text-navLight text-navDark'><Link to='/dashboard' >Dashboard</Link></li>
                 </ul>
             </nav>
 
@@ -156,6 +156,12 @@ function Header() {
                                             >
                                                 <Link to='/profile'>Profile</Link>
                                             </li>
+                                            <li
+                                                className='text-xl hover:bg-slate-300 text-black rounded px-3 cursor-pointer'
+                                                onClick={handleUserClick}
+                                            >
+                                                <Link to='/signout'>Sign Out</Link>
+                                            </li>
                                         </nav>
                                     )
                                 }
@@ -223,13 +229,13 @@ function Header() {
                             className='text-xl cursor-pointer hover:bg-slate-300 text-black rounded px-3'
                             onClick={handleClick}
                         >
-                            <Link to='/about'>About</Link>
+                            <Link to='/dashboard'>Dashboard</Link>
                         </li>
                         <li
                             className='text-xl cursor-pointer hover:bg-slate-300 text-black rounded px-3'
                             onClick={handleClick}
                         >
-                            <Link to='/projects'>Projects</Link>
+                            <Link to='/dashboard'>Dashboard</Link>
                         </li>
                     </nav>
                 }
