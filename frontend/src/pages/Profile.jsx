@@ -1,8 +1,13 @@
 import React from 'react'
+import ProfileSidebar from '../components/profile/ProfileSidebar'
+import ProfileMain from '../components/profile/ProfileMain'
 
 function Profile() {
   return (
-    <div>Profile</div>
+    <div className='flex flex-col tablet:flex-row'>
+      <ProfileSidebar/>
+      < ProfileMain />
+    </div>
   )
 }
 
