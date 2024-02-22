@@ -106,10 +106,12 @@ function SignUp() {
           dispatch(signInFailure())
           return setFailure(data.message)
         }
+        console.log("Hello : ", data.sendInfo.photoURL);
         dispatch(signInSuccess({
           email: data.sendInfo.email,
           id: data.sendInfo._id,
           username: data.sendInfo.username,
+          photoURL: data.sendInfo.photoURL ? data.sendInfo.photoURL : "https://cdn.vectorstock.com/i/1000x1000/30/97/flat-business-man-user-profile-avatar-icon-vector-4333097.webp",
         }))
       }
       catch (error) {

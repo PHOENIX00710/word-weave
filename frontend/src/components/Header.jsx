@@ -24,6 +24,8 @@ function Header() {
     const [userSignIn, setUserSignIn] = useState(false)
     const userDetails = useSelector(state => state.user.userDetails)
 
+    console.log(userDetails);
+
     const handleClick = (event) => {
         setMenuBtn((prevState) => (
             !prevState
@@ -53,7 +55,7 @@ function Header() {
             <nav className=''>
                 <ul className="list-none justify-between gap-20 font-bold  hidden tablet:flex">
                     <li className='text-xl hover:text-navLight text-navDark' ><Link to='/home'>Home</Link></li>
-                    <li className='text-xl hover:text-navLight text-navDark'><Link to='/dashboard'>Dashboard</Link></li>
+                    <li className='text-xl hover:text-navLight text-navDark'><Link to='/profile'>Profile</Link></li>
                     <li className='text-xl hover:text-navLight text-navDark'><Link to='/dashboard' >Dashboard</Link></li>
                 </ul>
             </nav>
@@ -117,7 +119,7 @@ function Header() {
                                 {/* User Avatar */}
                                 <Avatar
                                     className='cursor-pointer'
-                                    src={userDetails.profilePicture ? userDetails.profilePicture : "https://cdn.vectorstock.com/i/1000x1000/30/97/flat-business-man-user-profile-avatar-icon-vector-4333097.webp"}
+                                    src={userDetails.photoURL}
                                     onClick={handleUserClick}
                                 />
 
@@ -229,7 +231,7 @@ function Header() {
                             className='text-xl cursor-pointer hover:bg-slate-300 text-black rounded px-3'
                             onClick={handleClick}
                         >
-                            <Link to='/dashboard'>Dashboard</Link>
+                            <Link to='/profile'>Profile</Link>
                         </li>
                         <li
                             className='text-xl cursor-pointer hover:bg-slate-300 text-black rounded px-3'

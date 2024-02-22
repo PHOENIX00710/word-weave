@@ -76,6 +76,7 @@ export const googleSignup = async (req, res, next) => {
             next(errorHandler(401, 'Error in entered data'))
         )
     }
+    console.log(image);
     const username = Math.random(1).toString(36).slice(-8) + '-' + name.toString()
     const password = Math.random().toString(36).slice(-8)
     const hashedPassword = await bcrypt.hash(password, 12)

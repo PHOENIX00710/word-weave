@@ -14,7 +14,7 @@ function ProfileMain() {
                 <h1 className='text-center text-3xl font-bold'>PROFILE</h1>
                 <input type="file" name="" id="" className='m-auto w-64' />
                 <div className='w-32 h-32 border-4 border-slate-600 rounded-full flex justify-center items-start overflow-hidden m-auto'>
-                    <img src={`https://rb.gy/jxnd46`} className='rounded-full w-full h-full object-cover' alt="" />
+                    <img src={`${userDetails.photoURL}`} className='rounded-full w-full h-full object-cover' alt="" />
                 </div>
                 <TextField
                     id='Username'
