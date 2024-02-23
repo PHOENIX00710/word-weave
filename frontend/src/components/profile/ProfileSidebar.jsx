@@ -1,6 +1,7 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
+import { FaSignOutAlt } from "react-icons/fa";
 
 function ProfileSidebar() {
 
@@ -13,7 +14,10 @@ function ProfileSidebar() {
                     <section className='bg-slate-800 text-white font-medium px-3 py-1 rounded-lg'>{userDetails.username}</section>
                 </div>
             </Link>
-            <Link to={"/signout"} className='p-3 bg-white hover:bg-slate-500 rounded-md'>Signout</Link>
+            <Link to={"/signout"} className='p-3 bg-white hover:bg-slate-500 rounded-md flex justify-between'>
+                <section>Signout</section>
+                <section><FaSignOutAlt className='text-2xl' /></section>
+            </Link>
         </div>
     )
 }

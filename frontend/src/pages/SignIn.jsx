@@ -7,7 +7,7 @@ import { signInFailure, signInStart, signInSuccess } from '../features/user/user
 
 function SignIn() {
 
-  const userState = useSelector(state => state);
+  const userDetails = useSelector(state => state.user.userDetails);
   const [formData, setFormData] = useState({
     email: '',
     password: ''
@@ -69,7 +69,7 @@ function SignIn() {
             <span className=''><span className={`text-4xl md:text-6xl`}>W</span><span className={`text-2xl md:text-4xl`}>ord</span></span>
             <span className=''><span className={`text-4xl md:text-6xl`}>W</span><span className={`text-2xl md:text-4xl`}>eave</span></span>
           </div>
-          <h3>Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi eaque laudantium esse. Numquam itaque harum quo inventore minus!</h3>
+          <h3>WordWeave is a blogging web app offering custom profiles, post creation, and community engagement features for bloggers seeking to share their thoughts and interact with a like-minded audience.</h3>
         </section>
         <section id='right-side'>
           <form action="" method='POST' className='flex flex-col gap-5  '>
@@ -100,16 +100,13 @@ function SignIn() {
             {/* Loader */}
 
             {/* Sign up Button */}
-            {
-              !userState.loading &&
-              <Button variant="contained"
-                color='warning'
-                onClick={handleSubmit}
-                disabled={userState.loading}
-              >
-                SIGN IN
-              </Button>
-            }
+            <Button variant="contained"
+              color='warning'
+              onClick={handleSubmit}
+              disabled={userDetails ? true : false}
+            >
+              SIGN IN
+            </Button>
             <p className='flex justify-between'>
               <em>New User? </em>
               <Link to={"/signup"} className=' text-teal-500'>Register</Link>
@@ -117,14 +114,14 @@ function SignIn() {
           </form>
           {/* Alert Section */}
           {
-            userState.error &&
+            userDetails &&
             <Alert
               severity="error"
               sx={{
                 marginTop: "1.12rem"
               }}
             >
-              {userState.error}
+              {userDetails.error}
             </Alert>
           }
         </section>

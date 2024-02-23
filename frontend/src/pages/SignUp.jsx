@@ -106,7 +106,6 @@ function SignUp() {
           dispatch(signInFailure())
           return setFailure(data.message)
         }
-        console.log("Hello : ", data.sendInfo.photoURL);
         dispatch(signInSuccess({
           email: data.sendInfo.email,
           id: data.sendInfo._id,
@@ -134,7 +133,7 @@ function SignUp() {
             <span className=''><span className={`text-4xl md:text-6xl`}>W</span><span className={`text-2xl md:text-4xl`}>ord</span></span>
             <span className=''><span className={`text-4xl md:text-6xl`}>W</span><span className={`text-2xl md:text-4xl`}>eave</span></span>
           </div>
-          <h3>Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi eaque laudantium esse. Numquam itaque harum quo inventore minus!</h3>
+          <h3>WordWeave is a blogging web app offering custom profiles, post creation, and community engagement features for bloggers seeking to share their thoughts and interact with a like-minded audience.</h3>
         </section>
         <section id='right-side'>
           <form action="" method='POST' className='flex flex-col gap-5  '>

@@ -24,7 +24,6 @@ function Header() {
     const [userSignIn, setUserSignIn] = useState(false)
     const userDetails = useSelector(state => state.user.userDetails)
 
-    console.log(userDetails);
 
     const handleClick = (event) => {
         setMenuBtn((prevState) => (

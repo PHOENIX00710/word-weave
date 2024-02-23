@@ -149,7 +149,8 @@ export const updateUserDetails = async (req, res, next) => {
     await currUser.save()
     res.json({
         success: "true",
-        message: "User Details Updated"
+        message: "User Details Updated",
+        sendInfo: currUser
     })
 }
 
