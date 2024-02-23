@@ -115,6 +115,7 @@ function ProfileMain() {
 
     // Handle Updation of username and password
     const handleChange = (e) => {
+        console.log(e.target.id, e.target.value);
         setFormData({ ...formData, [e.target.id]: e.target.value })
     }
 
@@ -199,7 +200,7 @@ function ProfileMain() {
                 <TextField
                     id='username'
                     variant='filled'
-                    value={userDetails?.username}
+                    placeholder={userDetails?.username}
                     onChange={handleChange}
                 />
                 <TextField
