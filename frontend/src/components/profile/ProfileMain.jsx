@@ -14,9 +14,10 @@ function ProfileMain() {
 
     // Current user Details
     const userDetails = useSelector((state) => state.user.userDetails)
+    const userState = useSelector(state => state.user);
     const dispatch = useDispatch()
 
-    //For update in general
+    //For update in general state management
     const [formData, setFormData] = useState(null)
 
     // For progress Bar
@@ -27,7 +28,6 @@ function ProfileMain() {
     const [imageUploadError, setImageUploadError] = useState(null)
 
     // open state for popup confirmation for deleting 
-
     const [open, setOpen] = useState(false)
 
     const handlePopUpClose = () => {
@@ -35,21 +35,23 @@ function ProfileMain() {
     }
 
     const handleConfirmDelete = async () => {
-        const res = await fetch('/api/v1/removeUser', {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json',
+        try {
+            const res = await fetch('/api/v1/removeUser', {
+                method: 'DELETE',
+            })
+            const data = await res.json()
+            if (data.success == false) {
+                dispatch(deleteFailed(data.message))
+                setOpen(false)
             }
-        })
-        const data = res.json()
-        if (data.success == false) {
-            dispatch(deleteFailed("Failed in removing User"))
-            setOpen(false)
+            else {
+                dispatch(deleteSuccess())
+                setOpen(false)
+                navigate("/signup")
+            }
         }
-        else {
-            dispatch(deleteSuccess())
-            setOpen(false)
-            navigate("/signup")
+        catch (error) {
+
         }
     }
 
@@ -133,7 +135,7 @@ function ProfileMain() {
             })
             const data = await res.json()
             if (data.success == false)
-                return dispatch(updateFailure("Failed in updating user Details"))
+                return dispatch(updateFailure(data.message))
             else
                 return dispatch(updateSuccess({
                     email: data.sendInfo.email,
@@ -252,12 +254,8 @@ function ProfileMain() {
                     </Link>
                 </div>
                 {
-                    userDetails.error &&
-                    <Alert
-                        severity={"error"}
-                    >
-                        {userDetails.error}
-                    </Alert>
+                    userState.error &&
+                    <Alert severity='error'>{userState.error}</Alert>
                 }
             </form>
         </div>

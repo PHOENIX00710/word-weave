@@ -76,10 +76,9 @@ export const googleSignup = async (req, res, next) => {
             next(errorHandler(401, 'Error in entered data'))
         )
     }
-    console.log(image);
     const username = Math.random(1).toString(36).slice(-8) + '-' + name.toString()
     const password = Math.random().toString(36).slice(-8)
-    const hashedPassword = await bcrypt.hash(password, 12)
+    const hashedPassword = await bcrypt.hash(password, 10)
 
     const userExists = await userModel.findOne({ email });
     if (userExists) {
@@ -130,12 +129,15 @@ export const googleSignup = async (req, res, next) => {
 
 export const updateUserDetails = async (req, res, next) => {
     const token = req.cookies.user_token
+    console.log(token);
     let user_id = jwt.verify(token, process.env.JWT_KEY)
+    console.log(user_id);
 
     // To Convert user_ID from string to mongo id format
     let uid = new mongoose.Types.ObjectId(user_id)
 
     const currUser = await userModel.findById(uid)
+    console.log("User: ", currUser);
     if (!currUser)
         return next(errorHandler(403, "Unauthorized User"))
 
@@ -159,14 +161,18 @@ export const deleteUser = async (req, res, next) => {
     let user_id = jwt.verify(token, process.env.JWT_KEY)
     // To Convert user_ID from string to mongo id format
     let uid = new mongoose.Types.ObjectId(user_id)
-
+    console.log("Bitch i am here");
     const currUser = await userModel.findById(uid)
+    console.log("Bitch i am here 2");
     if (!currUser)
-        return next(errorHandler(403, "Unauthorized User"))
+        return next(errorHandler(410, "Unauthorized User"))
     try {
+        console.log("Bitch i am here 2.5");
         await currUser.deleteOne()
+        console.log("Bitch i am here 3");
         res
             .status(200)
+            .clearCookie("user_token")
             .json(
                 {
                     success: true,
@@ -182,7 +188,7 @@ export const deleteUser = async (req, res, next) => {
 export const signOut = (req, res, next) => {
     res
         .status(200)
-        .cookie('user_token', '')
+        .clearCookie("user_token")
         .json({
             success: true,
             message: "Signed Out Successfully"

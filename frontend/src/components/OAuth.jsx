@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { app } from '../firebase/firebase.config.js';
 import { FcGoogle } from "react-icons/fc";
 import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
@@ -9,6 +9,8 @@ import { useNavigate } from 'react-router-dom';
 
 function OAuth() {
 
+
+    const [failure, setFailure] = useState(null)
     // For navigation
     const navigate = useNavigate()
 
