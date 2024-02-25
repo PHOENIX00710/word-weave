@@ -22,6 +22,12 @@ export default {
       },
       screens: {
         tablet: "1000px"
+      },
+      minWidth: {
+        half: "45%"
+      },
+      maxWidth: {
+        "2/3": "66.6%"
       }
     },
   },
