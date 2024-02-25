@@ -1,13 +1,18 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Button, TextField } from '@mui/material'
 import Alert from '@mui/material/Alert';
 import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from "react-redux"
-import { signInFailure, signInStart, signInSuccess } from '../features/user/userSlice';
+import { reload, signInFailure, signInStart, signInSuccess } from '../features/user/userSlice';
+import OAuth from '../components/OAuth';
 
 function SignIn() {
 
-  const userDetails = useSelector(state => state.user.userDetails);
+  useEffect(() => {
+    dispatch(reload());
+  }, [])
+
+  const userState = useSelector(state => state.user);
   const [formData, setFormData] = useState({
     email: '',
     password: ''
@@ -34,23 +39,29 @@ function SignIn() {
         body: JSON.stringify(formData) // HTTP only handles text data
       })
       const data = await req.json()
-      if (data.success == false)
-        return dispatch(signInFailure("Error in signup. Try Again later!!"))
-      dispatch(signInSuccess({
-        email: data.sendInfo.email,
-        id: data.sendInfo._id,
-        username: data.sendInfo.username,
-        photoURL: data.sendInfo.photoURL ? data.sendInfo.photoURL : "https://cdn.vectorstock.com/i/1000x1000/30/97/flat-business-man-user-profile-avatar-icon-vector-4333097.webp",
-      }))
+      if (data.success === false) {
+        return dispatch(signInFailure(data.message))
+      }
+      else {
+        console.log(data.sendInfo);
+        dispatch(signInSuccess(data.sendInfo))
+        setFormData({
+          "email": '',
+          "password": '',
+        })
+        navigate("/home")
+        return;
+      }
     }
     catch (e) {
-      return dispatch(signInFailure(e.message))
+      setFormData({
+        "email": '',
+        "password": '',
+      })
+      dispatch(signInFailure(e.message))
+      navigate("/")
+      return
     }
-    setFormData({
-      "email": '',
-      "password": '',
-    })
-    navigate("/home")
   }
 
   const handleChange = (e) => {
@@ -62,7 +73,7 @@ function SignIn() {
 
 
   return (
-    <div className='h-screen flex justify-center '>
+    <div className='min-h-screen flex justify-center '>
       <div id="container" className=' flex flex-col gap-4 items-center tablet:flex-row tablet:gap-14 p-8 basis-1/2 '>
         <section id='left-side' className='p-4 items-center tablet:items-start flex flex-col gap-6 justify-center h-full'>
           <div id='logo' className={`text-white bg-gradient-to-r from-orange-400 via-red-500 to-red-700 w-fit font-bold px-3 py-1 rounded-md  flex justify-center items-center h-auto`}>
@@ -103,10 +114,14 @@ function SignIn() {
             <Button variant="contained"
               color='warning'
               onClick={handleSubmit}
-              disabled={userDetails ? true : false}
+              disabled={userState.loading ? true : false}
             >
               SIGN IN
             </Button>
+
+            {/* Google Continue */}
+            <OAuth />
+
             <p className='flex justify-between'>
               <em>New User? </em>
               <Link to={"/signup"} className=' text-teal-500'>Register</Link>
@@ -114,14 +129,14 @@ function SignIn() {
           </form>
           {/* Alert Section */}
           {
-            userDetails &&
+            userState.error &&
             <Alert
               severity="error"
               sx={{
                 marginTop: "1.12rem"
               }}
             >
-              {userDetails.error}
+              {userState.error}
             </Alert>
           }
         </section>
