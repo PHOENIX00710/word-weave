@@ -1,7 +1,5 @@
 import express from 'express'
 import { deleteUser, googleSignup, signOut, signinHelper, signup, updateUserDetails } from '../controllers/userControllers.js'
-import { userExits } from '../utils/userExists.js'
-
 const router = express.Router()
 
 router.post("/signup", signup)

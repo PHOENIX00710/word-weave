@@ -159,11 +159,10 @@ export const updateUserDetails = async (req, res, next) => {
 export const deleteUser = async (req, res, next) => {
     const token = req.cookies.user_token
     let user_id = jwt.verify(token, process.env.JWT_KEY)
+    
     // To Convert user_ID from string to mongo id format
     let uid = new mongoose.Types.ObjectId(user_id)
-    console.log("Bitch i am here");
     const currUser = await userModel.findById(uid)
-    console.log("Bitch i am here 2");
     if (!currUser)
         return next(errorHandler(410, "Unauthorized User"))
     try {

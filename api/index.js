@@ -3,6 +3,7 @@ import express from 'express'
 import dotenv from 'dotenv'
 import testRoute from './routes/test.js'
 import userRoute from './routes/users.js'
+import postRouter from './routes/posts.js'
 import cors from 'cors'
 import cookieParser from 'cookie-parser'
 
@@ -28,6 +29,7 @@ app.use(cookieParser())
 // Routes
 app.use("/api/v1", testRoute)
 app.use("/api/v1", userRoute)
+app.use("/api/v1/posts", postRouter);
 
 // Middleware to handle errors
 app.use((err, req, res, next) => {

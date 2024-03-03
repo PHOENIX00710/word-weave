@@ -10,6 +10,7 @@ import AdminOnlyPrivate from './components/private_Routes/AdminOnlyPrivate'
 import CreatePost from './components/posts/CreatePost'
 import PrivateRoute from './components/private_Routes/PrivateRoute'
 import { Dashboard } from '@mui/icons-material'
+import AllPosts from './components/posts/AllPosts'
 
 function App() {
   return (
