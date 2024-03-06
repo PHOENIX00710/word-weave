@@ -4,7 +4,7 @@ export const userExits = (req, res, next) => {
     const token = req.cookies.user_token;
 
     if (!token)
-        return redirect("/")
+        return res.redirect("/")
     try {
         const userID = jwt.verify(token, process.env.JWT_KEY);
         req.user = userID;
@@ -12,6 +12,6 @@ export const userExits = (req, res, next) => {
     } catch (error) {
         console.log(error);
         res.clearCookie("user_token");
-        redirect('/')
+        res.redirect('/')
     }
 }
