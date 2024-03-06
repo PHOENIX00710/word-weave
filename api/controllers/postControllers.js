@@ -75,6 +75,7 @@ export const updatePostDetails = async (req, res, next) => {
         const updatedPost = await currPost.updateOne(updateDetails)
 
         res
+            .status(201)
             .json(
                 {
                     success: true,
@@ -101,6 +102,7 @@ export const deletePost = async (req, res, next) => {
             return next(errorHandler(404, "You are not authorized to remove this post"))
         await currPost.deleteOne()
         res
+            .status(201)
             .json(
                 {
                     success: true,
@@ -112,4 +114,59 @@ export const deletePost = async (req, res, next) => {
     catch (error) {
         return next(errorHandler(error.statusCode, error.message));
     }
+}
+
+export const getAllPosts = async (req, res, next) => {
+    let category = req.query.category || 'uncategorized';
+    let skip = parseInt(req.query.skip) || 0;
+    let limit = parseInt(req.query.limit) || 9;
+    let sortDirection = req.query.sortBy || 'desc' // asc or desc
+
+    try {
+        const posts = await postModel.find({
+            ...(req.query.userID && { userID: req.query.userID }),
+            ...(req.query.slug && { slug: req.query.slug }),
+            ...(req.query.postID && { _id: req.query.postID }),
+            ...(
+                req.query.searchTerm &&
+                {
+                    $or: [
+                        { title: { $regex: req.query.searchTerm, $options: "si" } },
+                        { content: { $regex: req.query.searchTerm, $options: "si" } }
+                    ]
+                }
+            ),
+            category: category,
+        })
+            .sort({ updatedAt: sortDirection })
+            .skip(skip)
+            .limit(limit)
+
+        const totalPosts = await postModel.countDocuments()
+
+        const now = new Date()
+
+        const oneMonthAgo = new Date(
+            now.getFullYear(),
+            now.getMonth() - 1,
+            now.getDay()
+        )
+
+        const recentPosts = await postModel.find({
+            createdAt: { $gte: oneMonthAgo }
+        }).sort({ createdAt: "desc" })
+
+        res
+            .status(201)
+            .json({
+                success: true,
+                posts,
+                totalPosts,
+                recentPosts,
+            })
+    }
+    catch (error) {
+        return next(errorHandler(error.statusCode, error.message))
+    }
+
 }
